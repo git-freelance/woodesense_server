@@ -1,0 +1,36 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="{% block seo_description %}{% endblock %}">
+    <meta name="keywords" content="{% block seo_keywords %}{% endblock %}">
+    <title>{% block seo_title %}Woodsenseinteriors{% endblock %}</title>
+            <link rel="shortcut icon" href="{% static 'img/favicon.png' %}" >
+    <link href="{% static 'lib/bootstrap/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/font-awesome-4.7.0/css/font-awesome.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/jquery-mmenu/jquery.mmenu.all.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/fancybox/jquery.fancybox.min.css' %}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Heebo:100,300,500|Open+Sans:300,300i,400,600,700"
+          rel="stylesheet">
+    {% block include_css %}{% endblock %}
+    <link href="{% static 'css/base.min.css' %}" rel="stylesheet">
+</head>
+<body>
+<div class="wrapper">
+    {% block body_block %}{% endblock %}
+</div>
+
+<script src="{% static 'lib/jquery/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'lib/popper/popper.min.js' %}"></script>
+<script src="{% static 'lib/bootstrap/bootstrap.min.js' %}"></script>
+<script src="{% static 'lib/jquery-mmenu/jquery.mmenu.all.js' %}"></script>
+<script src="{% static 'lib/underscore/underscore-min.js' %}"></script>
+<script src="{% static 'lib/fancybox/jquery.fancybox.min.js' %}"></script>
+<script src="{% static 'js/base.min.js' %}"></script>
+{% block include_js %}{% endblock %}
+{% block footer_scripts %}{% endblock %}
+</body>
+</html>

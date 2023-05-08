@@ -1,0 +1,110 @@
+{% extends 'core/base_template.html' %}
+{% load static %}
+{% load extras %}
+
+{% block seo_description %}{{ category.seo_description }}{% endblock %}
+{% block seo_keywords %}{{ category.seo_keywords }}{% endblock %}
+{% block seo_title %}{{ category.seo_title }}{% endblock %}
+
+{% block template_body_block %}
+    <div id="page-category-detail">
+        {% with banner=category.get_banner_image %}
+            {% if banner %}
+                <section class="page-banner" style="background-image: url('{{ banner }}');">
+                    <div class="container">
+                        <h2>{{ category.name }}</h2>
+                    </div>
+                </section>
+            {% endif %}
+        {% endwith %}
+
+        <section class="page-content">
+            <div class="container">
+                {% with root_category=category.get_root %}
+                    <div class="row">
+                        <div class="col-lg-3 mb-3 mb-lg-0">
+                            <h4 id="root-cat-name"><a
+                                    href="{{ root_category.get_absolute_url }}">{{ root_category.name }}</a></h4>
+                            <ul id="subcats-list">
+                                <li><a href="{% url 'category_popular' root_category.slug %}"
+                                       {% if is_popular %}class="active"{% endif %}>Popular</a></li>
+                                {% for subcat in root_category.get_descendants %}
+                                    {% with link_url=subcat.get_absolute_url %}
+                                        <li><a href="{{ link_url }}"
+                                               {% if request.path == link_url %}class="active"{% endif %}>{{ subcat.name }}</a>
+                                        </li>
+                                    {% endwith %}
+                                {% endfor %}
+                            </ul>
+
+                            <div class="d-none d-lg-block">
+                                <p class="font-weight-bold">Client Reviews</p>
+                                {% for review in reviews %}
+                                    <div class="mb-4">
+                                        <p class="font-weight-light font-italic mb-1">"{{ review.text }}"</p>
+                                        <img src="{% static 'img/stars.png' %}" alt="">
+                                        <h5 class="mb-0 mt-2">- {{ review.author }}</h5>
+                                    </div>
+                                {% endfor %}
+                                <a href="{% url 'reviews' %}" class="btn btn-primary btn-blue px-4">View All</a>
+                            </div>
+                        </div>
+                        <div class="col-lg-9">
+                            {% if category.content_title_top or category.content_text_top %}
+                                {% if category.content_title_top %}
+                                    <h4 class="mb-1 font-weight-bold">{{ category.content_title_top }}</h4>{% endif %}
+                                {% if category.content_text_top %}
+                                    <p class="more">{{ category.content_text_top|safe|linebreaksbr }}</p>{% endif %}
+                            {% endif %}
+                            <div class="row">
+                                {% for product in products %}
+                                    <div class="col-md-6 col-lg-4">
+                                        {% get_product_box product 0 0 %}
+                                    </div>
+                                {% empty %}
+                                    <div class="col">
+                                        <h4 class="text-center font-weight-light text-muted mt-lg-5">No Products
+                                            Found</h4>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            {% if products.has_other_pages %}
+                                <nav aria-label="" class="mt-3">
+                                    <ul class="pagination justify-content-center">
+                                        {% if products.has_previous %}
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page={{ products.previous_page_number }}">Previous</a>
+                                            </li>
+                                        {% else %}
+                                            <li class="page-item disabled">
+                                                <a class="page-link" href="#" tabindex="-1">Previous</a>
+                                            </li>
+                                        {% endif %}
+
+                                        {% if products.has_next %}
+                                            <li class="page-item">
+                                                <a class="page-link"
+                                                   href="?page={{ products.next_page_number }}">Next</a>
+                                            </li>
+                                        {% else %}
+                                            <li class="page-item disabled">
+                                                <a class="page-link" href="#" tabindex="-1">Next</a>
+                                            </li>
+                                        {% endif %}
+                                    </ul>
+                                </nav>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endwith %}
+            </div>
+            {% if site_config.disclaimer %}
+                <div id="cat-text-wr">
+                    <div class="container">
+                        <p class="m-0 font-italic font-weight-bold text-center" id="cat-discl">{{ site_config.disclaimer|linebreaksbr }}</p>
+                    </div>
+                </div>
+            {% endif %}
+        </section>
+    </div>
+{% endblock %}

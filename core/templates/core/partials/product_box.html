@@ -1,0 +1,18 @@
+{% with product_image=product.get_featured_image %}
+    <a class="product-box {% if product.is_coming_soon %}coming-soon{% endif %}" href="{{ product.get_absolute_url }}">
+        <div class="img-wr"
+             {% if product_image %}style="background-image: url('{{ product_image.image.url }}');"{% endif %}>
+            {% if show_featured_label %}
+                <div class="featured-abs">FEATURED</div>{% endif %}
+        </div>
+        <div class="name-wr">{{ product.name }}</div>
+        {% if show_prices and product.price_regular and product.price_sale %}
+            <div class="d-flex align-items-center justify-content-center price-wr">
+                <span>Reg.</span>
+                <s>${{ product.price_regular }}</s>
+                <span>Now</span>
+                <span class="price-sale">${{ product.price_sale }}</span>
+            </div>
+        {% endif %}
+    </a>
+{% endwith %}

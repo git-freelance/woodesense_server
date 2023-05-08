@@ -1,0 +1,47 @@
+{% extends 'core/base_template.html' %}
+{% load static extras %}
+
+{% block seo_description %}{{ page.seo_description }}{% endblock %}
+{% block seo_keywords %}{{ page.seo_keywords }}{% endblock %}
+{% block seo_title %}{{ page.seo_title }}{% endblock %}
+
+{% block template_body_block %}
+    <div id="page-about">
+        {% if page.banner %}
+            <section class="page-banner" style="background-image: url('{{ page.banner.url }}');">
+                <div class="container">
+                    <h2>{{ page.banner_text }}</h2>
+                </div>
+            </section>
+        {% endif %}
+        <section class="page-content">
+            <div class="container">
+                <div class="row">
+                    {% if page.featured_image %}
+                        <div class="col-lg-4 mb-3 mb-lg-0">
+                            <img src="{{ page.featured_image.url }}" alt="" class="img-fluid">
+                        </div>
+                    {% endif %}
+                    <div class="col">
+                        <div class="redactor-wr">
+                            {% autoescape off %}
+                                {{ page.content }}
+                            {% endautoescape %}
+                        </div>
+                        <a href="{% url 'contact' %}" class="btn btn-primary btn-blue px-4">Visit Our Store</a>
+                    </div>
+                </div>
+            </div>
+
+            {% include 'core/partials/showroom.html' %}
+        </section>
+    </div>
+{% endblock %}
+
+{% block include_js %}
+    {{ block.super }}
+    <script>
+        var all_gallery_images = {{ images_json|safe }}['images']; // For showroom
+    </script>
+    <script src="{% static 'js/showroom.min.js' %}"></script>
+{% endblock %}

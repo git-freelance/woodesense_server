@@ -1,0 +1,12 @@
+{% load static %}
+<div class="review-box">
+    <div class="review-text">
+        {% if full_text %}
+            {{ review.text }}
+        {% else %}
+            {{ review.get_short_text }}
+        {% endif %}
+    </div>
+    <p class="review-author">{{ review.author }}
+        <img src="{% static 'img/stars.png' %}" alt=""></p>
+</div>

@@ -1,0 +1,35 @@
+{% load mptt_tags %}
+
+<ul class="navi">
+    {% for item in root_items %}
+        <li>
+            {% if item.page.is_category_submenu %}
+                <a href="#" id="products-link">{{ item }}</a>
+                <ul>
+                    {% recursetree categories %}
+                        <li>
+                            <a href="{{ node.get_absolute_url }}">{{ node.name }}</a>
+                            {% if not node.is_leaf_node %}
+                                <ul>
+                                    {{ children }}
+                                </ul>
+                            {% endif %}
+                        </li>
+                    {% endrecursetree %}
+                </ul>
+            {% else %}
+                <a href="{{ item.get_absolute_url }}">{{ item }}</a>
+                {% if not item.is_leaf_node %}
+                    <ul>
+                        {% for children in item.get_children %}
+                            <li><a href="{{ children.get_absolute_url }}">{{ children }}</a></li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endif %}
+        </li>
+    {% endfor %}
+    <li class="d-lg-none"><a href="{% url 'on_sale' %}">ON SALE</a></li>
+    {% if site_config.vanities_link %}
+        <li class="d-lg-none"><a target="_blank" href="{{ site_config.vanities_link }}">VISIT V&M</a></li>{% endif %}
+</ul>

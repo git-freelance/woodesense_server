@@ -1,0 +1,27 @@
+{% extends 'core/base_template.html' %}
+{% load extras %}
+
+{% block seo_description %}{{ solo.seo_description }}{% endblock %}
+{% block seo_keywords %}{{ solo.seo_keywords }}{% endblock %}
+{% block seo_title %}{{ solo.seo_title }}{% endblock %}
+
+{% block template_body_block %}
+    <div id="page-reviews">
+        {% if solo.banner %}
+            <section class="page-banner" style="background-image: url('{{ solo.banner.url }}');">
+                <div class="container">
+                    {% if solo.banner_text %}
+                        <h2>{{ solo.banner_text }}</h2>
+                    {% endif %}
+                </div>
+            </section>
+        {% endif %}
+        <section class="page-content">
+            <div class="container">
+                {% for review in reviews %}
+                    {% get_review_box review 1 %}
+                {% endfor %}
+            </div>
+        </section>
+    </div>
+{% endblock %}

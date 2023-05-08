@@ -1,0 +1,30 @@
+{% extends 'core/base_template.html' %}
+{% load extras %}
+
+{% block seo_description %}{{ page.seo_description }}{% endblock %}
+{% block seo_keywords %}{{ page.seo_keywords }}{% endblock %}
+{% block seo_title %}{{ page.seo_title }}{% endblock %}
+
+{% block template_body_block %}
+    <div id="page-custom">
+        {% if page.banner %}
+            <section class="page-banner" style="background-image: url('{{ page.banner.url }}');">
+                <div class="container">
+                    <h2>{{ page.name }}</h2>
+                </div>
+            </section>
+        {% endif %}
+        <section class="page-content">
+            <div class="container">
+                {% if not page.banner %}
+                    <h4 class="mb-4">{{ page.name }}</h4>
+                {% endif %}
+                <div class="redactor-wr">
+                    {% autoescape off %}
+                        {{ page.content }}
+                    {% endautoescape %}
+                </div>
+            </div>
+        </section>
+    </div>
+{% endblock %}

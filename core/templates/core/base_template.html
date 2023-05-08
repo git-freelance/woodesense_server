@@ -1,0 +1,198 @@
+{% extends 'core/base_html.html' %}
+{% load static %}
+{% load solo_tags %}
+{% load extras %}
+
+{% block body_block %}
+    {#    <div id="mmwrapper">#}
+{#    {% get_solo 'core.SiteConfiguration' as site_config %}#}
+    {% get_solo 'core.Header' as header_solo %}
+    {% get_solo 'core.Footer' as footer_solo %}
+    {% get_solo 'core.Popup' as popup_solo %}
+    {% get_root_categories as root_categories %}
+
+    <style>
+        {% with color_sides=header_solo.header_color_sides color_center=header_solo.header_color_center %}
+            header.header {
+                background: {{ color_sides }};
+                background: -moz-linear-gradient(left, {{ color_sides }} 0%, {{ color_center }} 50%, {{ color_sides }} 100%);
+                background: -webkit-gradient(left top, right top, color-stop(0%, {{ color_sides }}), color-stop(50%, {{ color_center }}), color-stop(100%, {{ color_sides }}));
+                background: -webkit-linear-gradient(left, {{ color_sides }} 0%, {{ color_center }} 50%, {{ color_sides }} 100%);
+                background: -o-linear-gradient(left, {{ color_sides }} 0%, {{ color_center }} 50%, {{ color_sides }} 100%);
+                background: -ms-linear-gradient(left, {{ color_sides }} 0%, {{ color_center }} 50%, {{ color_sides }} 100%);
+                background: linear-gradient(to right, {{ color_sides }} 0%, {{ color_center }} 50%, {{ color_sides }} 100%);
+                filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#01123e', endColorstr='#01123e', GradientType=1);
+            }
+        {% endwith %}
+    </style>
+    <header class="header">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-md-auto text-center mb-3 mb-lg-0">
+                    <a href="{% url 'index' %}">
+                        <img src="{% static 'img/logo.png' %}" alt="">
+                    </a>
+                </div>
+
+                <div class="col-md">
+                    <div class="top d-flex flex-wrap align-items-center justify-content-center justify-content-lg-end mb-3">
+                        <a href="{{ site_config.facebook_link|default:'#' }}" target="_blank"
+                           class="d-none d-md-inline">
+                            <img src="{% static 'img/like.png' %}" alt=""></a>
+                        <a href="#" id="btn-top-search" data-toggle="popover">
+                            <img src="{% static 'img/t-search.png' %}" alt="" class="ml-md-3 mr-3"></a>
+                        <br class="d-none d-md-block">
+                        <h4 class="mb-0">
+                            <span class="">|</span> Call Us: <a
+                                href="tel:{{ site_config.contact_phone }}"><strong>{{ site_config.contact_phone }}</strong></a>
+                        </h4>
+                    </div>
+                    <div id="main-menu" class="bottom">
+                        {% get_top_menu %}
+                    </div>
+                </div>
+
+                <div class="col-md-auto">
+                    <div class="form-row align-items-center">
+                        <div class="col-auto d-none d-lg-block">
+                            <a href="{% url 'on_sale' %}"><img src="{% static 'img/onsale.png' %}" alt=""></a>
+                        </div>
+                        {% if site_config.vanities_link %}
+                            <div class="col-auto d-none d-lg-block">
+                                <a target="_blank" href="{{ site_config.vanities_link }}">
+                                    <img src="{% static 'img/vnm.png' %}" alt=""></a>
+                            </div>
+                        {% endif %}
+                        <div class="col-auto ml-auto d-lg-none">
+                            <a href="#main-menu" class="btn btn-outline-light ml-3"><i class="fa fa-fw fa-bars"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="position-relative">
+        {% get_categories_submenu_desktop root_categories %}
+    </div>
+
+    {% block template_body_block %}{% endblock %}
+
+    <footer class="footer-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-7 col-xl-6 mb-3 mb-lg-0">
+                    <div class="row">
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <p class="fhe">Categories</p>
+                            <ul>
+                                {% for category in root_categories %}
+                                    <li><a href="{{ category.get_absolute_url }}">{{ category.name }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <p class="fhe">Offers</p>
+                            <ul>
+                                {% for item in footer_solo.footercolumn1item_set.all %}
+                                    <li><a href="{{ item.get_absolute_url }}">{{ item }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <p class="fhe">Policies</p>
+                            <ul>
+                                {% for item in footer_solo.footercolumn2item_set.all %}
+                                    <li><a href="{{ item.get_absolute_url }}">{{ item }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5 col-xl-6">
+                    <p class="fhe">Stay Connected</p>
+                    <p>Subscribe now and get a latest updates to our deals and offers.</p>
+                    <form action="https://woodsenseinteriors.us18.list-manage.com/subscribe/post?u=852fcb2ff6758841810e1befc&id=bb70fe5423"
+                          method="POST" name="mc-embedded-subscribe-form">
+                        <div class="form-row mb-3">
+                            <div class="col-md-7 mb-3 mb-md-0">
+                                <input type="email" name="EMAIL" class="form-control form-control-lg"
+                                       placeholder="Enter Your Email Address">
+                                <input type="text" class="hp" name="b_852fcb2ff6758841810e1befc_bb70fe5423"
+                                       tabindex="-1" value="">
+                            </div>
+                            <div class="col">
+                                <button type="submit" class="btn btn-block btn-outline-light btn-lg">Sign up now!
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <p class="fhe">Follow us</p>
+                    {% if site_config.facebook_link %}
+                        <a href="{{ site_config.facebook_link }}" target="_blank"><img class="mr-2"
+                                                                                       src="{% static 'img/fb.png' %}"></a>
+                    {% endif %}
+                    {% if site_config.twitter_link %}
+                        <a href="{{ site_config.twitter_link }}" target="_blank"><img class="mr-2"
+                                                                                      src="{% static 'img/tw.png' %}"></a>
+                    {% endif %}
+                    {% if site_config.google_plus_link %}
+                        <a href="{{ site_config.google_plus_link }}" target="_blank"><img class="mr-2"
+                                                                                          src="{% static 'img/gp.png' %}"></a>
+                    {% endif %}
+                    {% if site_config.houzz_link %}
+                        <a href="{{ site_config.houzz_link }}" target="_blank"><img src="{% static 'img/houzz.png' %}"></a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <footer class="footer-bottom">
+        <div class="container">
+            <p class="m-0 text-center text-md-right text-light">{{ footer_solo.copyright_text }}</p>
+        </div>
+    </footer>
+
+    {% if popup_solo.enabled %}
+        <div class="modal fade" id="modalTimer" tabindex="-1" role="dialog" aria-labelledby="modalTimerLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        {% if popup_solo.image %}
+                            <img src="{{ popup_solo.image.url }}" class="img-fluid" alt="">
+                        {% endif %}
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <a href="{{ popup_solo.get_absolute_url }}" class="btn btn-lg btn-warning btn-orange px-5">
+                            {{ popup_solo.button_text|default:'' }}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    {#    </div>#}
+{% endblock %}
+
+{% block include_js %}
+    {% get_solo 'core.Popup' as popup_solo %}
+    {% if popup_solo.enabled %}
+        <script>
+            var p_delay = {{ popup_solo.delay }};
+            if (getCookie('popup') != 1) {
+                setCookie('popup', 1, 0.5);
+                setTimeout(function () {
+                    $('#modalTimer').modal('show');
+                }, p_delay * 1000);
+            }
+        </script>
+    {% endif %}
+{% endblock %}
+
+{% block footer_scripts %}
+{#    {% get_solo 'core.SiteConfiguration' as site_config %}#}
+    {{ site_config.footer_scripts|safe }}
+{% endblock %}

@@ -1,0 +1,97 @@
+{% extends 'core/base_template.html' %}
+{% load extras %}
+
+{% block seo_description %}{{ product.seo_description }}{% endblock %}
+{% block seo_keywords %}{{ product.seo_keywords }}{% endblock %}
+{% block seo_title %}{{ product.seo_title }}{% endblock %}
+
+{% block template_body_block %}
+    <div id="page-product">
+        <section class="page-content">
+            <div class="container">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb small">
+                        {% for cat in product.get_breadcrumb %}
+                            <li class="breadcrumb-item"><a href="{{ cat.get_absolute_url }}">{{ cat.name }}</a></li>
+                        {% endfor %}
+                        <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+                    </ol>
+                </nav>
+                <div class="row">
+                    {% if product.images.exists %}
+                        <div class="col-lg-5">
+                            <a href="{{ product.get_featured_image.image.url }}" data-fancybox="prod"
+                               id="main-image-link">
+                                <img src="{{ product.get_featured_image.image.url }}" alt="">
+                            </a>
+                            <div class="form-row">
+                                {% for image in product.images.all %}
+                                    <div class="col-3">
+                                        <a href="#" class="small-image-link {% if forloop.first %}active{% endif %}"
+                                           data-image="{{ image.image.url }}">
+                                            <img src="{{ image.image.url }}" alt="">
+                                        </a>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="col">
+                        {% if product.is_coming_soon %}
+                            <p class="text-danger">COMING SOON</p>
+                        {% endif %}
+                        <h1>{{ product.name }}</h1>
+                        <p>{{ product.description|linebreaksbr }}</p>
+                        {% if product.sku %}
+                            <p class="font-weight-light">SKU CODE: {{ product.sku }}</p>
+                        {% endif %}
+                        {% if product.width and product.height and product.depth %}
+                            <p class="font-weight-light">DIMENSION IN INCHES: {{ product.width }} x {{ product.height }} x {{ product.depth }}</p>
+                        {% endif %}
+                        {% if product.is_on_sale and product.price_regular and product.price_sale %}
+                            <p id="price">Reg. <span class="regular">${{ product.price_regular }}</span> Now
+                                <span>${{ product.price_sale }}</span></p>
+                        {% elif product.price_regular %}
+                            <p id="price"><span>${{ product.price_regular }}</span></p>
+                        {% endif %}
+                        <h4>Inquire: <strong>{{ site_config.contact_phone }}</strong></h4>
+                    </div>
+                </div>
+                {% if site_config.disclaimer %}
+                    <p class="mt-2 mb-0 font-italic font-weight-bold text-center" id="prod-discl">{{ site_config.disclaimer|linebreaksbr }}</p>
+                {% endif %}
+            </div>
+            {% if related_products %}
+                <div id="pr-related-wr">
+                    <div class="container">
+                        <h4>Related Products</h4>
+                        <div class="row">
+                            {% for product in related_products %}
+                                <div class="col-md-6 col-lg-4 col-xl-3">
+                                    {% get_product_box product 0 0 %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </section>
+    </div>
+{% endblock %}
+
+{% block include_js %}
+    {{ block.super }}
+    <script>
+        $(function () {
+            $('.small-image-link').click(function () {
+                var new_img = $(this).data('image');
+                $('#main-image-link').attr('href', new_img);
+                $('#main-image-link').find('img').attr('src', new_img);
+                //
+                $('.small-image-link').removeClass('active');
+                $(this).addClass('active');
+                return false;
+            });
+        });
+    </script>
+{% endblock %}

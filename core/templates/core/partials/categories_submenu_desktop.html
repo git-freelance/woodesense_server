@@ -1,0 +1,19 @@
+<div id="categories-submenu">
+    <div class="container-fluid">
+        <div class="row">
+            {% for root in root_categories %}
+                <div class="{% if root_categories|length_is:6 %}col-md-4 col-lg{% else %}col{% endif %}">
+                    <div class="hwr">
+                        <h6 class="font-weight-bold text-uppercase m-0"><a
+                                href="{{ root.get_absolute_url }}">{{ root.name }}</a></h6>
+                    </div>
+                    {% for subcat in root.get_descendants %}
+                        <ul class="list-unstyled">
+                            <li><a href="{{ subcat.get_absolute_url }}">{{ subcat.name }}</a></li>
+                        </ul>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>

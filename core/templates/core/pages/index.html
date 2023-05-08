@@ -1,0 +1,309 @@
+{% extends 'core/base_template.html' %}
+{% load static extras widget_tweaks %}
+
+{% block seo_description %}{{ solo.seo_description }}{% endblock %}
+{% block seo_keywords %}{{ solo.seo_keywords }}{% endblock %}
+{% block seo_title %}{{ solo.seo_title }}{% endblock %}
+
+{% block include_css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'lib/owl-carousel/assets/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'lib/owl-carousel/assets/owl.theme.default.min.css' %}">
+{% endblock %}
+
+{% block template_body_block %}
+    <div id="page-home">
+        {% with banners=solo.banners.all %}
+            {% if banners %}
+                <section class="home-bns">
+                    <div id="carouselHomeBanners" class="carousel slide" data-ride="carousel">
+                        <div class="carousel-inner">
+                            {% for banner in banners %}
+                                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                    <div class="ban" style="background-image: url('{{ banner.image.url }}');">
+                                        <div class="container h-100 d-flex flex-column align-items-center justify-content-center">
+                                            {% if banner.header %}
+                                                <h1 class="mb-3">{{ banner.header }}</h1>
+                                            {% endif %}
+                                            {% if banner.subheader %}
+                                                <h5 class="mb-3">{{ banner.subheader }}</h5>
+                                            {% endif %}
+                                            {% if banner.button_text %}
+                                                <a href="{{ banner.get_absolute_url }}"
+                                                   class="btn btn-primary btn-lg px-5 mt-lg-4 btn-blue">{{ banner.button_text }}</a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <a class="carousel-control-prev" href="#carouselHomeBanners" role="button" data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselHomeBanners" role="button" data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
+                </section>
+            {% endif %}
+        {% endwith %}
+
+        {% if solo.video_heading %}
+            <section class="home-video">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-6 d-none d-lg-block">
+                            <h2>{{ solo.video_heading }}</h2>
+                            <p class="m-0">{{ solo.video_description|linebreaksbr }}</p>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="iframe-wr">
+                                <iframe width="560" height="315" src="{{ solo.video_embed_url }}" frameborder="0"
+                                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                                        allowfullscreen></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        {% endif %}
+
+        {% if root_categories %}
+            <section class="home-categories">
+                <div class="container">
+                    <div class="box-header">
+                        <div class="box"><h4>CATEGORIES</h4></div>
+                    </div>
+
+                    <div class="row">
+                        {% for category in root_categories %}
+                            {% with featured_image=category.home_box_image %}
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="cat-box"
+                                         {% if featured_image %}style="background-image: url('{{ featured_image.url }}');"{% endif %}>
+                                        <div class="bottom">
+                                            <h5>{{ category.name }}</h5>
+                                            <p>{{ category.home_box_text }}</p>
+                                            <a href="{{ category.get_absolute_url }}" class="btn btn-primary btn-blue">SHOP
+                                                NOW</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endwith %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </section>
+        {% endif %}
+
+        {% with featured_products=solo.featured_products.all %}
+            {% if featured_products %}
+                <section class="home-featured">
+                    <div class="container">
+                        <div class="box-header">
+                            <div class="box"><h4>FEATURED PRODUCTS</h4></div>
+                        </div>
+
+                        <div class="owl-carousel owl-fp">
+                            {% for fp in featured_products %}
+                                <div class="pl-3">
+                                    {% get_product_box fp 1 0 %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </section>
+            {% endif %}
+        {% endwith %}
+
+        {% if reviews %}
+            <section class="home-testi">
+                <div class="container">
+                    <h4 class="he">WHAT OUR CUSTOMERS SAY</h4>
+
+                    <div class="row no-gutters align-items-center flex-nowrap">
+                        <div class="col-auto d-none d-md-block">
+                            <a href="#" id="reviewPrev"><img src="{% static 'img/tarrl.png' %}" alt=""></a>
+                        </div>
+                        <div class="col w-100" style="overflow: hidden;">
+                            <div class="owl-carousel owl-review">
+                                {% for review in reviews %}
+                                    <div class="pt-1 px-1">
+                                        {% get_review_box review 0 %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="col-auto d-none d-md-block">
+                            <a href="#" id="reviewNext"><img src="{% static 'img/tarrr.png' %}" alt=""></a>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-5">
+                        <a href="{% url 'reviews' %}" class="btn btn-primary btn-lg px-4 btn-blue">VIEW ALL
+                            TESTIMONIALS</a>
+                    </div>
+                </div>
+            </section>
+        {% endif %}
+
+        {% include 'core/partials/showroom.html' %}
+
+        <section class="home-tour">
+            <div class="container">
+                <h4 class="he">TOUR OUR STORE</h4>
+
+                <div class="row">
+                    <div class="col-xl-9 mx-auto">
+                        <div class="iframe-wr">
+                            <iframe id="iframe-tour"
+                                    src="{{ video_tour_url }}"
+                                    frameborder="0"></iframe>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="col-md-2 col-lg-3"></div>
+                    <div class="col-md-4 col-lg-3 mb-3 mb-md-0">
+                        <a href="#" id="h-virtual-tour" class="btn btn-lg btn-primary btn-block btn-blue">VIRTUAL
+                            TOUR</a>
+                    </div>
+                    <div class="col-md-4 col-lg-3">
+                        <a href="#" id="h-video-tour" class="btn btn-lg btn-warning btn-block btn-orange disabled">VIDEO
+                            TOUR</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="home-git">
+            <div class="container">
+                <h4 class="text-light he">GET IN TOUCH</h4>
+
+                <form action="{% url 'contact' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-xl-9 mx-auto">
+                            <div class="row mb-3 mb-xl-5">
+                                <div class="col-md-4 text-center mb-2 mb-md-0">
+                                    <img src="{% static 'img/git-1.png' %}" alt="">
+                                    <h6 class="git-he">{{ site_config.contact_address|linebreaksbr }}</h6>
+                                </div>
+                                <div class="col-md-4 text-center mb-2 mb-md-0">
+                                    <img src="{% static 'img/git-2.png' %}" alt="">
+                                    <h4 class="git-he">{{ site_config.contact_phone }}</h4>
+                                </div>
+                                <div class="col-md-4 text-center">
+                                    <img src="{% static 'img/git-3.png' %}" alt="">
+                                    <h6 class="git-he">{{ site_config.working_hours|linebreaksbr }}</h6>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ contact_form.name|add_class:'form-control' }}
+                                    {{ contact_form.name.errors }}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ contact_form.email|add_class:'form-control' }}
+                                    {{ contact_form.email.errors }}
+                                </div>
+                            </div>
+                            {{ contact_form.message|add_class:'form-control mb-3' }}
+                            {{ contact_form.message.errors }}
+                            {{ contact_form.honeyp0t|add_class:'hp' }}
+                            {#                            <textarea name="message" placeholder="Message" class="form-control mb-3"#}
+                            {#                                      rows="4"></textarea>#}
+                            <div class="text-right">
+                                <button type="submit" class="btn btn-light px-5">SEND</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <section class="home-map">
+            <div class="container">
+                <h4 class="he">PROUDLY SERVING GTA FOR OVER 22 YEARS</h4>
+            </div>
+            <a href="{% url 'contact' %}"><img src="{% static 'img/map.jpg' %}" class="img-fluid" alt=""></a>
+        </section>
+    </div>
+{% endblock %}
+
+{% block include_js %}
+    {{ block.super }}
+    <script src="{% static 'lib/owl-carousel/owl.carousel.min.js' %}"></script>
+    <script>
+        var all_gallery_images = {{ images_json|safe }}['images']; // For showroom
+        $(document).ready(function () {
+            $(".owl-fp").owlCarousel({
+                loop: true,
+                margin: 30,
+                autoplay: true,
+                autoplayTimeout: 2500,
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    768: {
+                        items: 2
+                    },
+                    992: {
+                        items: 3
+                    },
+                    1200: {
+                        items: 4
+                    }
+                }
+            });
+
+            $(".owl-review").owlCarousel({
+                loop: true,
+                autoplay: true,
+                autoplayTimeout: 3000,
+                margin: 30,
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    768: {
+                        items: 2
+                    },
+                    992: {
+                        items: 3
+                    }
+                }
+            });
+
+            $('#reviewPrev').click(function () {
+                $(".owl-review").trigger('prev.owl.carousel');
+                return false;
+            });
+            $('#reviewNext').click(function () {
+                $(".owl-review").trigger('next.owl.carousel');
+                return false;
+            });
+
+
+            // TOUR
+            var $iframe_tour = $('#iframe-tour');
+            $('#h-virtual-tour').click(function () {
+                $(this).addClass('disabled');
+                $('#h-video-tour').removeClass('disabled');
+                $iframe_tour.attr('src', '{{ virtual_tour_url }}');
+                return false;
+            });
+            $('#h-video-tour').click(function () {
+                $(this).addClass('disabled');
+                $('#h-virtual-tour').removeClass('disabled');
+                $iframe_tour.attr('src', '{{ video_tour_url }}');
+                return false;
+            });
+        });
+    </script>
+    <script src="{% static 'js/showroom.min.js' %}"></script>
+{% endblock %}

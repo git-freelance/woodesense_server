@@ -1,0 +1,81 @@
+{% extends 'core/base_template.html' %}
+{% load static extras widget_tweaks %}
+
+{% block seo_description %}{{ page.seo_description }}{% endblock %}
+{% block seo_keywords %}{{ page.seo_keywords }}{% endblock %}
+{% block seo_title %}{{ page.seo_title }}{% endblock %}
+
+{% block template_body_block %}
+    <div id="page-contact">
+        {% if page.banner %}
+            <section class="page-banner" style="background-image: url('{{ page.banner.url }}');">
+                <div class="container">
+                    <h2>{{ page.banner_text }}</h2>
+                </div>
+            </section>
+        {% endif %}
+        <section class="page-content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 mb-3 mb-lg-0">
+                        <div class="redactor-wr">
+                            {% autoescape off %}
+                                {{ page.content }}
+                            {% endautoescape %}
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        {#                        <iframe src="https://www.google.com/maps/embed/v1/place?key={{ site_config.google_maps_api_key }}&q=Wood+Sense+Interiors+{{ site_config.contact_address|quoteplus }}"#}
+                        {#                                frameborder="0"></iframe>#}
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d11572.737362658663!2d-79.6808099!3d43.5193485!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x1acbc4a8bfd1e14f!2sWood+Sense+Interiors+Inc!5e0!3m2!1sen!2sin!4v1495190248007"
+                                frameborder="0"></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <section class="contact-git">
+                <div class="container">
+                    <h4 class="he">GET IN TOUCH</h4>
+
+                    <form action="." method="POST">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-xl-9 mx-auto">
+                                <div class="row mb-3 mb-xl-5">
+                                    <div class="col-md-4 text-center mb-2 mb-md-0">
+                                        <img src="{% static 'img/git-1-b.png' %}" alt="">
+                                        <h6 class="git-he">{{ site_config.contact_address|linebreaksbr }}</h6>
+                                    </div>
+                                    <div class="col-md-4 text-center mb-2 mb-md-0">
+                                        <img src="{% static 'img/git-2-b.png' %}" alt="">
+                                        <h4 class="git-he">{{ site_config.contact_phone }}</h4>
+                                    </div>
+                                    <div class="col-md-4 text-center">
+                                        <img src="{% static 'img/git-3-b.png' %}" alt="">
+                                        <h6 class="git-he">{{ site_config.working_hours|linebreaksbr }}</h6>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        {{ form.name|add_class:'form-control' }}
+                                        {{ form.name.errors }}
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        {{ form.email|add_class:'form-control' }}
+                                        {{ form.email.errors }}
+                                    </div>
+                                </div>
+                                {{ form.message|add_class:'form-control mb-3' }}
+                                {{ form.message.errors }}
+                                {{ form.honeyp0t|add_class:'hp' }}
+                                <div class="text-right">
+                                    <button type="submit" class="btn btn-warning btn-orange px-5">SEND</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </section>
+    </div>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'core/base_template.html' %}
+{% load extras %}
+
+{% block seo_description %}{{ tourpage.seo_description }}{% endblock %}
+{% block seo_keywords %}{{ tourpage.seo_keywords }}{% endblock %}
+{% block seo_title %}{{ tourpage.seo_title }}{% endblock %}
+
+{% block template_body_block %}
+    <div id="page-tour">
+        <section class="page-content">
+            <div class="container">
+                <h3 class="text-center">{{ tourpage.page_title }}</h3>
+
+                <div class="row">
+                    <div class="col-xl-10 mx-auto">
+                        <div class="iframe-wr">
+                            <iframe id="iframe-tour" src="{{ tourpage.virtual_tour_url }}" frameborder="0"></iframe>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="col-md-2 col-lg-3"></div>
+                    <div class="col-md-4 col-lg-3 mb-3 mb-md-0">
+                        <a href="#" id="h-virtual-tour" class="btn btn-lg btn-primary btn-block btn-blue disabled">VIRTUAL
+                            TOUR</a>
+                    </div>
+                    <div class="col-md-4 col-lg-3">
+                        <a href="#" id="h-video-tour" class="btn btn-lg btn-warning btn-block btn-orange">VIDEO TOUR</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+{% endblock %}
+
+{% block include_js %}
+    {{ block.super }}
+    <script>
+        $(function () {
+            var $iframe_tour = $('#iframe-tour');
+            $('#h-virtual-tour').click(function () {
+                $(this).addClass('disabled');
+                $('#h-video-tour').removeClass('disabled');
+                $iframe_tour.attr('src', '{{ tourpage.virtual_tour_url }}');
+                return false;
+            });
+            $('#h-video-tour').click(function () {
+                $(this).addClass('disabled');
+                $('#h-virtual-tour').removeClass('disabled');
+                $iframe_tour.attr('src', '{{ tourpage.video_tour_url }}');
+                return false;
+            });
+        });
+    </script>
+{% endblock %}
